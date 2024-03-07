@@ -13,7 +13,6 @@ func main() {
 	for {
 		fmt.Println("Введите выражение вида \"a + b\"")
 
-		var output string
 		var result int
 		var isRoman bool
 		isTypesEqual := true
@@ -77,12 +76,7 @@ func main() {
 			return
 		}
 
-		if isRoman {
-			output = arabicToRoman(result)
-		} else {
-			output = strconv.Itoa(result)
-		}
-
+		output := formatResult(result, isRoman)
 		fmt.Println(output)
 
 	}
@@ -214,4 +208,11 @@ func calculate(operator string, a, b int) int {
 		result = a / b
 	}
 	return result
+}
+
+func formatResult(result int, isRoman bool) string { 
+	if isRoman { 
+		return arabicToRoman(result) 
+	} 
+	return strconv.Itoa(result) 
 }
