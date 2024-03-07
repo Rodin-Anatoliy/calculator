@@ -81,7 +81,7 @@ func main() {
 
 		}
 		
-		if isRoman && result < 0 {
+		if isRoman && result < 1 {
 			fmt.Println("Паника, завершаю работу")
 			return
 		}
