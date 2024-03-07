@@ -17,14 +17,14 @@ func calculator(text string) string {
 	
 	if strings.Count(text, operation) > 1 || operation == "" {
 		fmt.Println("Ошибка: не является допустимой математической операцией")
-		return
+		os.Exit(1)
 	}
 
 	operands  := strings.Split(text, operation)
 
 	if len(operands) != 2 {
 		fmt.Println("Ошибка: не является допустимой математической операцией")
-		return
+		os.Exit(1)
 	}
 
 	var aStr, bStr = operands[0], operands[1]
@@ -37,19 +37,19 @@ func calculator(text string) string {
 
 	if aType != bType {
 		fmt.Println("Ошибка: используются одновременно разные системы счисления")
-		return
+		os.Exit(1)
 	}
 
 	operandType := aType
 
 	if operandType != numberTypes.arabic && operandType != numberTypes.roman {
 		fmt.Println("Ошибка: введены не корректные символы")
-		return
+		os.Exit(1)
 	}
 
 	if !(numberValidation(aInt) || numberValidation(bInt)) {
 		fmt.Println("Ошибка: число выходит за допустимый диапазон")
-		return
+		os.Exit(1)
 	}
 
 	isRoman := operandType == numberTypes.roman
@@ -57,7 +57,7 @@ func calculator(text string) string {
 	
 	if isRoman && result < 1 {
 		fmt.Println("Ошибка: недопустимый результат для римских цифр")
-		return
+		os.Exit(1)
 	}
 
 	output := formatResult(result, isRoman)
@@ -184,8 +184,7 @@ func calculate(operator string, a, b int) int {
 	case operationSymbol.div:
 		if b == 0 {
 			fmt.Println("Ошибка: деление на ноль")
-			return 0
-			// исправить 
+			os.Exit(1)
 		}
 		result = a / b
 	}
