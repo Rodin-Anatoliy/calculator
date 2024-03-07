@@ -12,10 +12,6 @@ func main() {
 	reader := bufio.NewReader(os.Stdin)
 	for {
 		fmt.Println("Введите выражение вида \"a + b\"")
-
-		var result int
-		var isRoman bool
-		isTypesEqual := true
 		text, _ := reader.ReadString('\n')
 
 		text = strings.Join(strings.Split(text, " "), "")
@@ -35,41 +31,7 @@ func main() {
 			return
 		}
 
-		for index, item := range textNumbers { 
-			numberType := getNumberType(item)
-
-			if numberType != numberTypes.arabic && numberType != numberTypes.roman {
-				fmt.Println("Ошибка: введены не корректные символы")
-				return
-			} 
-
-			if index != 0 {
-				previousNumberType := getNumberType(textNumbers[index-1])
-				isTypesEqual = isTypesEqual && (numberType == previousNumberType)
-			}
-
-			if !isTypesEqual {
-				fmt.Println("Ошибка: используются одновременно разные системы счисления")
-				return
-			}
-
-			isRoman = numberType == numberTypes.roman
-
-			number := getNumber(numberType, item)
-			isValidNumber := numberValidation(number)
-
-			if !isValidNumber {
-				fmt.Println("Ошибка: число выходит за допустимый диапазон")
-				return
-			}
-
-			if index == 0 {
-				result = number
-			} else {
-				result = calculate(operation, result, number)
-			}
-
-		}
+		result, isRoman := intermediateCalculations(textNumbers, operation)
 		
 		if isRoman && result < 1 {
 			fmt.Println("Ошибка: недопустимый результат для римских цифр")
@@ -215,4 +177,45 @@ func formatResult(result int, isRoman bool) string {
 		return arabicToRoman(result) 
 	} 
 	return strconv.Itoa(result) 
+}
+
+func intermediateCalculations(textNumbers []string, operation string) (int, bool) {
+	var result int 
+	var isRoman bool 
+	var isTypesEqual = true
+	for index, item := range textNumbers { 
+		numberType := getNumberType(item)
+
+		if numberType != numberTypes.arabic && numberType != numberTypes.roman {
+			fmt.Println("Ошибка: введены не корректные символы")
+			return 0, false
+		} 
+
+		if index != 0 {
+			previousNumberType := getNumberType(textNumbers[index-1])
+			isTypesEqual = isTypesEqual && (numberType == previousNumberType)
+		}
+
+		if !isTypesEqual {
+			fmt.Println("Ошибка: используются одновременно разные системы счисления")
+			return 0, false
+		}
+
+		isRoman = numberType == numberTypes.roman
+
+		number := getNumber(numberType, item)
+		isValidNumber := numberValidation(number)
+
+		if !isValidNumber {
+			fmt.Println("Ошибка: число выходит за допустимый диапазон")
+			return 0, false
+		}
+
+		if index == 0 {
+			result = number
+		} else {
+			result = calculate(operation, result, number)
+		}
+	}
+	return result, isRoman
 }
