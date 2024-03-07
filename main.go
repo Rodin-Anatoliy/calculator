@@ -8,6 +8,17 @@ import (
 	"strings"
 )
 
+func main() {
+	reader := bufio.NewReader(os.Stdin)
+	for {
+		fmt.Println("Введите выражение вида \"a + b\"")
+		input, _ := reader.ReadString('\n')
+		output:= calculator(input)
+		fmt.Println(output)
+	}
+
+}
+
 func calculator(input string) string {
 
 	text := strings.ReplaceAll(input, " ", "")
@@ -189,15 +200,4 @@ func formatResult(result int, isRoman bool) string {
 		return arabicToRoman(result) 
 	} 
 	return strconv.Itoa(result) 
-}
-
-func main() {
-	reader := bufio.NewReader(os.Stdin)
-	for {
-		fmt.Println("Введите выражение вида \"a + b\"")
-		input, _ := reader.ReadString('\n')
-		output:= calculator(input)
-		fmt.Println(output)
-	}
-
 }
