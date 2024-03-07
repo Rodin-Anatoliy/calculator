@@ -43,7 +43,7 @@ func calculator(input string) string {
 		panic("введены не корректные символы")
 	}
 
-	if !(numberValidation(aInt) || numberValidation(bInt)) {
+	if !(numberValidation(aInt) && numberValidation(bInt)) {
 		panic("число выходит за допустимый диапазон")
 	}
 
