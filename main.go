@@ -10,8 +10,8 @@ import (
 
 func calculator(text string) string {
 
-	text = strings.Join(strings.Split(text, " "), "")
-	text = strings.Join(strings.Split(text, "\r\n"), "")
+	text = strings.ReplaceAll(text, " ", "")
+	text = strings.ReplaceAll(text, "\r\n", "")
 	
 	operation := getOperationSymbol(text)
 	
