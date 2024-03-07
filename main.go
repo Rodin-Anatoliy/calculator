@@ -16,15 +16,13 @@ func calculator(input string) string {
 	operation := getOperationSymbol(text)
 	
 	if strings.Count(text, operation) > 1 || operation == "" {
-		fmt.Println("Ошибка: не является допустимой математической операцией")
-		os.Exit(1)
+		panic("не является допустимой математической операцией")
 	}
 
 	operands  := strings.Split(text, operation)
 
 	if len(operands) != 2 {
-		fmt.Println("Ошибка: не является допустимой математической операцией")
-		os.Exit(1)
+		panic("не является допустимой математической операцией")
 	}
 
 	var aStr, bStr = operands[0], operands[1]
@@ -36,28 +34,24 @@ func calculator(input string) string {
 	bInt := getNumber(bType, bStr)
 
 	if aType != bType {
-		fmt.Println("Ошибка: используются одновременно разные системы счисления")
-		os.Exit(1)
+		panic("используются одновременно разные системы счисления")
 	}
 
 	operandType := aType
 
 	if operandType != numberTypes.arabic && operandType != numberTypes.roman {
-		fmt.Println("Ошибка: введены не корректные символы")
-		os.Exit(1)
+		panic("введены не корректные символы")
 	}
 
 	if !(numberValidation(aInt) || numberValidation(bInt)) {
-		fmt.Println("Ошибка: число выходит за допустимый диапазон")
-		os.Exit(1)
+		panic("число выходит за допустимый диапазон")
 	}
 
 	isRoman := operandType == numberTypes.roman
 	result := calculate(operation, aInt, bInt)
 	
 	if isRoman && result < 1 {
-		fmt.Println("Ошибка: недопустимый результат для римских цифр")
-		os.Exit(1)
+		panic("недопустимый результат для римских цифр")
 	}
 
 	output := formatResult(result, isRoman)
@@ -183,8 +177,7 @@ func calculate(operator string, a, b int) int {
 		result = a * b
 	case operationSymbol.div:
 		if b == 0 {
-			fmt.Println("Ошибка: деление на ноль")
-			os.Exit(1)
+			panic("деление на ноль")
 		}
 		result = a / b
 	}
@@ -203,7 +196,7 @@ func main() {
 	for {
 		fmt.Println("Введите выражение вида \"a + b\"")
 		input, _ := reader.ReadString('\n')
-		output := calculator(input)
+		output:= calculator(input)
 		fmt.Println(output)
 	}
 
