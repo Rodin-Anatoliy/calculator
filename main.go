@@ -67,16 +67,7 @@ func main() {
 			if index == 0 {
 				result = number
 			} else {
-				switch {
-				case operation == operationSymbol.plus:
-					result = result + number
-				case operation == operationSymbol.minus:
-					result = result - number
-				case operation == operationSymbol.multi:
-					result = result * number
-				case operation == operationSymbol.div:
-					result = result / number
-				}
+				result = calculate(operation, result, number)
 			}
 
 		}
@@ -203,4 +194,24 @@ func arabicToRoman(result int) string {
 	thirdDigit := romanIntegers[result%10]
 
 	return firstDigit + secondDigit + thirdDigit
+}
+
+func calculate(operator string, a, b int) int {
+	result := 0
+	switch operator {
+	case operationSymbol.plus:
+		result = a + b
+	case operationSymbol.minus:
+		result = a - b
+	case operationSymbol.multi:
+		result = a * b
+	case operationSymbol.div:
+		if b == 0 {
+			fmt.Println("Ошибка: деление на ноль")
+			return 0
+			// исправить 
+		}
+		result = a / b
+	}
+	return result
 }
