@@ -25,14 +25,14 @@ func main() {
 		operation := getOperationSymbol(text)
 		
 		if strings.Count(text, operation) > 1 || operation == "" {
-			fmt.Println("Паника, завершаю работу")
+			fmt.Println("Ошибка: не является допустимой математической операцией")
 			return
 		}
 
 		textNumbers  := strings.Split(text, operation)
 
 		if len(textNumbers) != 2 {
-			fmt.Println("Паника, завершаю работу")
+			fmt.Println("Ошибка: не является допустимой математической операцией")
 			return
 		}
 
@@ -40,7 +40,7 @@ func main() {
 			numberType := getNumberType(item)
 
 			if numberType != numberTypes.arabic && numberType != numberTypes.roman {
-				fmt.Println("Паника, завершаю работу")
+				fmt.Println("Ошибка: введены не корректные символы")
 				return
 			} 
 
@@ -50,7 +50,7 @@ func main() {
 			}
 
 			if !isTypesEqual {
-				fmt.Println("Паника, завершаю работу")
+				fmt.Println("Ошибка: используются одновременно разные системы счисления")
 				return
 			}
 
@@ -60,7 +60,7 @@ func main() {
 			isValidNumber := numberValidation(number)
 
 			if !isValidNumber {
-				fmt.Println("Паника, завершаю работу")
+				fmt.Println("Ошибка: число выходит за допустимый диапазон")
 				return
 			}
 
@@ -82,7 +82,7 @@ func main() {
 		}
 		
 		if isRoman && result < 1 {
-			fmt.Println("Паника, завершаю работу")
+			fmt.Println("Ошибка: недопустимый результат для римских цифр")
 			return
 		}
 
