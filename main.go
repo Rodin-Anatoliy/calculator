@@ -22,7 +22,8 @@ func main() {
 func calculator(input string) string {
 
 	text := strings.ReplaceAll(input, " ", "")
-	text = strings.ReplaceAll(text, "\r\n", "")
+	text = strings.TrimSuffix(text, "\r\n") // для windows
+	text = strings.TrimSuffix(text, "\n") // для linux и mac os
 	
 	operation := getOperationSymbol(text)
 	
