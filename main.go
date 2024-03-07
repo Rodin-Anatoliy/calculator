@@ -24,14 +24,40 @@ func main() {
 			return
 		}
 
-		textNumbers  := strings.Split(text, operation)
+		operands  := strings.Split(text, operation)
 
-		if len(textNumbers) != 2 {
+		if len(operands) != 2 {
 			fmt.Println("Ошибка: не является допустимой математической операцией")
 			return
 		}
 
-		result, isRoman := intermediateCalculations(textNumbers, operation)
+		var aStr, bStr = operands[0], operands[1]
+
+		aType := getNumberType(aStr)
+		aInt := getNumber(aType, aStr)
+
+		bType := getNumberType(bStr)
+		bInt := getNumber(bType, bStr)
+
+		if aType != bType {
+			fmt.Println("Ошибка: используются одновременно разные системы счисления")
+			return
+		}
+
+		operandType := aType
+
+		if operandType != numberTypes.arabic && operandType != numberTypes.roman {
+			fmt.Println("Ошибка: введены не корректные символы")
+			return
+		}
+
+		if !(numberValidation(aInt) || numberValidation(bInt)) {
+			fmt.Println("Ошибка: число выходит за допустимый диапазон")
+			return
+		}
+
+		isRoman := operandType == numberTypes.roman
+		result := calculate(operation, aInt, bInt)
 		
 		if isRoman && result < 1 {
 			fmt.Println("Ошибка: недопустимый результат для римских цифр")
@@ -177,45 +203,4 @@ func formatResult(result int, isRoman bool) string {
 		return arabicToRoman(result) 
 	} 
 	return strconv.Itoa(result) 
-}
-
-func intermediateCalculations(textNumbers []string, operation string) (int, bool) {
-	var result int 
-	var isRoman bool 
-	var isTypesEqual = true
-	for index, item := range textNumbers { 
-		numberType := getNumberType(item)
-
-		if numberType != numberTypes.arabic && numberType != numberTypes.roman {
-			fmt.Println("Ошибка: введены не корректные символы")
-			return 0, false
-		} 
-
-		if index != 0 {
-			previousNumberType := getNumberType(textNumbers[index-1])
-			isTypesEqual = isTypesEqual && (numberType == previousNumberType)
-		}
-
-		if !isTypesEqual {
-			fmt.Println("Ошибка: используются одновременно разные системы счисления")
-			return 0, false
-		}
-
-		isRoman = numberType == numberTypes.roman
-
-		number := getNumber(numberType, item)
-		isValidNumber := numberValidation(number)
-
-		if !isValidNumber {
-			fmt.Println("Ошибка: число выходит за допустимый диапазон")
-			return 0, false
-		}
-
-		if index == 0 {
-			result = number
-		} else {
-			result = calculate(operation, result, number)
-		}
-	}
-	return result, isRoman
 }
