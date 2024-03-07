@@ -3,7 +3,6 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"math"
 	"os"
 	"strconv"
 	"strings"
@@ -15,7 +14,7 @@ func main() {
 		fmt.Println("Введите выражение вида \"a + b\"")
 
 		var output string
-		var result float64
+		var result int
 		var isRoman bool
 		isTypesEqual := true
 		text, _ := reader.ReadString('\n')
@@ -66,17 +65,17 @@ func main() {
 			}
 
 			if index == 0 {
-				result = float64(number)
+				result = number
 			} else {
 				switch {
 				case operation == operationSymbol.plus:
-					result = result + float64(number)
+					result = result + number
 				case operation == operationSymbol.minus:
-					result = result - float64(number)
+					result = result - number
 				case operation == operationSymbol.multi:
-					result = result * float64(number)
+					result = result * number
 				case operation == operationSymbol.div:
-					result = result / float64(number)
+					result = result / number
 				}
 			}
 
@@ -90,7 +89,7 @@ func main() {
 		if isRoman {
 			output = arabicToRoman(result)
 		} else {
-			output = strconv.FormatFloat(result, 'f', 6, 64)
+			output = strconv.Itoa(result)
 		}
 
 		fmt.Println(output)
@@ -166,20 +165,6 @@ var romanIntegers = map[int]string{
 	1000: "M",
 }
 
-var romanFractions = map[int]string{
-	1: "·",
-	2: "··",
-	3: "···",
-	4: "····",
-	5: "·····",
-	6: "S",
-	7: "S·",
-	8: "S··",
-	9: "S···",
-	10: "S····",
-	11: "S·····",
-}
-
 func getNumberType(text string) string {
 	var numberType string
 	number, _ := strconv.Atoi(text)
@@ -203,31 +188,19 @@ func numberValidation(number int) bool {
 	}
 }
 
-func arabicToRoman(result float64) string {
+func arabicToRoman(result int) string {
 
-	integer := int(result)
-	fraction := int(math.Round((result - float64(integer)) * 12))
-
-	if fraction == 12 {
-		integer = integer + 1
-		fraction = 0
-	}
-
-	firstDigit := romanIntegers[integer/100]
+	firstDigit := romanIntegers[result/100]
 	firstDigit = strings.ReplaceAll(firstDigit, romanIntegers[10], romanIntegers[1000])
 	firstDigit = strings.ReplaceAll(firstDigit, romanIntegers[5], romanIntegers[500])
 	firstDigit = strings.ReplaceAll(firstDigit, romanIntegers[1], romanIntegers[100])
 
-	secondDigit := romanIntegers[integer%100/10]
+	secondDigit := romanIntegers[result%100/10]
 	secondDigit = strings.ReplaceAll(secondDigit, romanIntegers[10], romanIntegers[100])
 	secondDigit = strings.ReplaceAll(secondDigit, romanIntegers[5], romanIntegers[50])
 	secondDigit = strings.ReplaceAll(secondDigit, romanIntegers[1], romanIntegers[10])
 
-	thirdDigit := romanIntegers[integer%10]
+	thirdDigit := romanIntegers[result%10]
 
-	romanInteger := firstDigit + secondDigit + thirdDigit
-
-	romanFraction := romanFractions[fraction]
-
-	return romanInteger + romanFraction
+	return firstDigit + secondDigit + thirdDigit
 }
