@@ -8,9 +8,9 @@ import (
 	"strings"
 )
 
-func calculator(text string) string {
+func calculator(input string) string {
 
-	text = strings.ReplaceAll(text, " ", "")
+	text := strings.ReplaceAll(input, " ", "")
 	text = strings.ReplaceAll(text, "\r\n", "")
 	
 	operation := getOperationSymbol(text)
@@ -202,8 +202,8 @@ func main() {
 	reader := bufio.NewReader(os.Stdin)
 	for {
 		fmt.Println("Введите выражение вида \"a + b\"")
-		text, _ := reader.ReadString('\n')
-		output := calculator(text)
+		input, _ := reader.ReadString('\n')
+		output := calculator(input)
 		fmt.Println(output)
 	}
 
