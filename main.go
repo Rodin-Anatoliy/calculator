@@ -8,66 +8,60 @@ import (
 	"strings"
 )
 
-func main() {
-	reader := bufio.NewReader(os.Stdin)
-	for {
-		fmt.Println("Введите выражение вида \"a + b\"")
-		text, _ := reader.ReadString('\n')
+func calculator(text string) string {
 
-		text = strings.Join(strings.Split(text, " "), "")
-		text = strings.Join(strings.Split(text, "\r\n"), "")
-		
-		operation := getOperationSymbol(text)
-		
-		if strings.Count(text, operation) > 1 || operation == "" {
-			fmt.Println("Ошибка: не является допустимой математической операцией")
-			return
-		}
-
-		operands  := strings.Split(text, operation)
-
-		if len(operands) != 2 {
-			fmt.Println("Ошибка: не является допустимой математической операцией")
-			return
-		}
-
-		var aStr, bStr = operands[0], operands[1]
-
-		aType := getNumberType(aStr)
-		aInt := getNumber(aType, aStr)
-
-		bType := getNumberType(bStr)
-		bInt := getNumber(bType, bStr)
-
-		if aType != bType {
-			fmt.Println("Ошибка: используются одновременно разные системы счисления")
-			return
-		}
-
-		operandType := aType
-
-		if operandType != numberTypes.arabic && operandType != numberTypes.roman {
-			fmt.Println("Ошибка: введены не корректные символы")
-			return
-		}
-
-		if !(numberValidation(aInt) || numberValidation(bInt)) {
-			fmt.Println("Ошибка: число выходит за допустимый диапазон")
-			return
-		}
-
-		isRoman := operandType == numberTypes.roman
-		result := calculate(operation, aInt, bInt)
-		
-		if isRoman && result < 1 {
-			fmt.Println("Ошибка: недопустимый результат для римских цифр")
-			return
-		}
-
-		output := formatResult(result, isRoman)
-		fmt.Println(output)
-
+	text = strings.Join(strings.Split(text, " "), "")
+	text = strings.Join(strings.Split(text, "\r\n"), "")
+	
+	operation := getOperationSymbol(text)
+	
+	if strings.Count(text, operation) > 1 || operation == "" {
+		fmt.Println("Ошибка: не является допустимой математической операцией")
+		return
 	}
+
+	operands  := strings.Split(text, operation)
+
+	if len(operands) != 2 {
+		fmt.Println("Ошибка: не является допустимой математической операцией")
+		return
+	}
+
+	var aStr, bStr = operands[0], operands[1]
+
+	aType := getNumberType(aStr)
+	aInt := getNumber(aType, aStr)
+
+	bType := getNumberType(bStr)
+	bInt := getNumber(bType, bStr)
+
+	if aType != bType {
+		fmt.Println("Ошибка: используются одновременно разные системы счисления")
+		return
+	}
+
+	operandType := aType
+
+	if operandType != numberTypes.arabic && operandType != numberTypes.roman {
+		fmt.Println("Ошибка: введены не корректные символы")
+		return
+	}
+
+	if !(numberValidation(aInt) || numberValidation(bInt)) {
+		fmt.Println("Ошибка: число выходит за допустимый диапазон")
+		return
+	}
+
+	isRoman := operandType == numberTypes.roman
+	result := calculate(operation, aInt, bInt)
+	
+	if isRoman && result < 1 {
+		fmt.Println("Ошибка: недопустимый результат для римских цифр")
+		return
+	}
+
+	output := formatResult(result, isRoman)
+	return output
 }
 
 var operationSymbol = struct {
@@ -203,4 +197,15 @@ func formatResult(result int, isRoman bool) string {
 		return arabicToRoman(result) 
 	} 
 	return strconv.Itoa(result) 
+}
+
+func main() {
+	reader := bufio.NewReader(os.Stdin)
+	for {
+		fmt.Println("Введите выражение вида \"a + b\"")
+		text, _ := reader.ReadString('\n')
+		output := calculator(text)
+		fmt.Println(output)
+	}
+
 }
